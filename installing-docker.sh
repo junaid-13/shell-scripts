@@ -59,7 +59,12 @@ echo "***************************************"
 echo "Creating the docker group..."
 echo "***************************************"
 
-sudo groupadd docker
+if getent group docker > /dev/null 2>&1; then
+  echo "Docker group already exists. Skipping group creation."
+else
+  echo "Docker group does not exist. Creating docker group..."
+  sudo groupadd docker
+fi
 
 
 echo "***************************************"
