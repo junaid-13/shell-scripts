@@ -1,6 +1,8 @@
 #!/bin/bash
 # This script installs Docker on a ubuntu system using apt package manager.
 
+set -e
+
 echo "**************************************"
 echo "Updating the system..."
 echo "**************************************"
@@ -9,14 +11,15 @@ sudo apt-get update && sudo apt-get upgrade -y
 echo "**************************************"
 echo "Installing prerequisites..."
 echo "**************************************"
-sudo apt-get install -y curl ca-certificates -m 0755 -d /etc/apt/keyrings
+sudo apt-get install -y curl ca-certificates gnupg lsb-release
 
 echo "**************************************"
 echo "Adding Docker's official GPG key..."
 echo "**************************************"
-
-sudo curl -SL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-
+sudo mkdir -p /etc/apt/keyrings
+ curl -fsSL https://download.docker.com/linux/ubuntu/gpg  |\
+    sudo gpg --dearmor -o /etc/apt/keyrings/docker.asc
+ sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 echo "**************************************"
 echo "Allocating the read permissions for the keyring to all users..."
@@ -29,7 +32,7 @@ echo "Adding Docker's official APT repository to your Ubuntu system..."
 echo "**************************************"
 
 echo \
-"deb [arch = $(dpkg --print-architecture) signed-by = /etc/apt/keyrings/docker.asc]  https://download.docker.com/linux/ubuntu \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc]  https://download.docker.com/linux/ubuntu \
  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable | \
  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null "
 
