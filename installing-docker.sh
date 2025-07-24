@@ -18,21 +18,21 @@ echo "Adding Docker's official GPG key..."
 echo "**************************************"
 sudo mkdir -p /etc/apt/keyrings
  curl -fsSL https://download.docker.com/linux/ubuntu/gpg  |\
-    sudo gpg --dearmor -o /etc/apt/keyrings/docker.asc
+    sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
  sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 echo "**************************************"
 echo "Allocating the read permissions for the keyring to all users..."
 echo "**************************************"
 
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 echo "**************************************"
 echo "Adding Docker's official APT repository to your Ubuntu system..."
 echo "**************************************"
 
 echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc]  https://download.docker.com/linux/ubuntu \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg]  https://download.docker.com/linux/ubuntu \
  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable | \
  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null "
 
