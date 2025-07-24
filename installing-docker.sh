@@ -31,11 +31,14 @@ echo "**************************************"
 echo "Adding Docker's official APT repository to your Ubuntu system..."
 echo "**************************************"
 
-echo \
+if [ ! -f /etc/apt/keyrings/docker.gpg ]; then
+  echo \
 "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg]  \
 https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 
-
+else
+  echo "Docker GPG key already exists. Skipping download."
+fi
 
 echo "**************************************"
 echo "Updating after adding Docker's repository..."
